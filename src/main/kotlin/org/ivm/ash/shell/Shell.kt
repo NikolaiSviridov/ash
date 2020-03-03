@@ -1,57 +1,23 @@
 package org.ivm.ash.shell
 
-import org.ivm.ash.parser.CommandsBuilder
-import org.ivm.ash.parser.Parser
-import org.ivm.ash.parser.PreCommand
-import org.ivm.ash.parser.VariablesMappings
+import org.ivm.ash.parser.*
 import java.io.File
 
 
 class Shell(private val arguments: ArgumentList) {
-    private val environment = Environment(System.getenv())
-    private val currentDirectory = File(System.getProperty("user.dir"))
+    private var environment = Environment(System.getenv())
+    private var currentDirectory = File(System.getProperty("user.dir"))
     private val promt = Promt()
 
     companion object {
-        private val shellCommands = listOf("exit", "ls", "cat", "echo", "cd", "clear")
-    }
-
-    private fun startProcess(command: PreCommand, input: String?): Process {
-        val target = command.commandName + command.arguments.joinToString(" ")
-        val builder = ProcessBuilder(target);
-        builder.directory(currentDirectory)
-        val environment = builder.environment()
-        environment.putAll(environment)
-        builder.redirectOutput(ProcessBuilder.Redirect.PIPE)
-//        builder.redirectInput(ProcessBuilder.Redirect.PIPE)
-        if (input == null) {
-
-        }
-        else {
-
-        }
-        builder.redirectError(ProcessBuilder.Redirect.PIPE)
-        return builder.start()
-    }
-
-    fun execute(commands: Iterable<PreCommand>) {
-        var lastResult = ""
-        for (preCommand in commands) {
-            if (preCommand.commandName in shellCommands) {
-//                val result = runCommand()
-            }
-            else {
-            }
-        }
+        val internalCommands = listOf("exit", "cat", "echo", "cd")
+        val SUCCESS_EXIT_CODE = 0
     }
 
     fun promtLoop() {
         while (true) {
             val input = promt.promtInput(currentDirectory)
-            val result = execute(input)
-            if (result != 0) {
-                println("Terminated with non-zero exit code: $result")
-            }
+            execute(input)
         }
     }
 
@@ -59,41 +25,33 @@ class Shell(private val arguments: ArgumentList) {
         promtLoop()
     }
 
-    private fun execute(input: String): Int {
+    private fun handleFailedCommand(command: Command) {
+        println("Command: $command terminated with non-zero exit code: ${command.getExitCode()}")
+    }
+
+    private fun execute(input: String) {
         val commandsPipeline = buildCommandPipeline(input)
         var lastOutput: ByteArray? = null
         for (command in commandsPipeline) {
-            val commandList = mutableListOf(command.commandName)
-            commandList.addAll(command.arguments)
-            val currentOutput = runProcess(commandList, lastOutput)
-            lastOutput = currentOutput
+            if (command is InternalShellCommand) {
+                command.setShellCurrentDirectory(currentDirectory)
+                command.setShellEnvironment(environment)
+            }
+            command.execute(lastOutput)
+            if (command.getExitCode() != SUCCESS_EXIT_CODE) {
+                handleFailedCommand(command)
+                return
+            }
+            if (command is InternalShellCommand) {
+                currentDirectory = command.getShellCurrentDirectory()
+                environment = command.getShellEnvironment()
+            }
+            lastOutput = command.getOutput()
         }
         if (lastOutput != null) {
             System.out.write(lastOutput)
             System.out.flush()
         }
-        return 0
-    }
-
-    private fun runProcess(command: List<String>, input: ByteArray? = null): ByteArray {
-        val builder = ProcessBuilder(command);
-        builder.directory(File(System.getProperty("user.dir")))
-        if (input != null) {
-            builder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
-        }
-        else {
-            builder.redirectOutput(ProcessBuilder.Redirect.PIPE)
-        }
-        builder.redirectError(ProcessBuilder.Redirect.INHERIT)
-        val process = builder.start()
-        if (input != null) {
-            process.outputStream.write(input)
-            // Simply it's equivalent to sending Ctrl-D
-            process.outputStream.close()
-        }
-        val exitCode = process.waitFor()
-//        println("exit code: $exitCode")
-        return process.inputStream.readAllBytes()
     }
 
     private fun constructParserEnvironment(): VariablesMappings {
@@ -108,12 +66,14 @@ class Shell(private val arguments: ArgumentList) {
         }
     }
 
-    private fun buildCommandPipeline(input: String): List<PreCommand> {
+    private fun buildCommandPipeline(input: String): List<Command> {
         val variablesMappings = constructParserEnvironment()
         val parser = Parser(input, variablesMappings)
-        val commandsBuilder = CommandsBuilder(parser.parse())
-        updateEnvironment(parser.mappings)
+        val preCommandsBuilder = PreCommandsBuilder(parser.parse())
+        preCommandsBuilder.build()
+        val commandsBuilder = CommandsBuilder(preCommandsBuilder.commands)
         commandsBuilder.build()
+        updateEnvironment(parser.mappings)
         return commandsBuilder.commands
     }
 }

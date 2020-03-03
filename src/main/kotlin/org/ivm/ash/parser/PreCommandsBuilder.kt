@@ -1,6 +1,6 @@
 package org.ivm.ash.parser
 
-class CommandsBuilder(val blocks: List<TokenList>) {
+class PreCommandsBuilder(val blocks: List<TokenList>) {
     val commands = mutableListOf<PreCommand>()
 
     fun build() {
