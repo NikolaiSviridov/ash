@@ -6,7 +6,7 @@ class CommandsBuilder(private val preCommands: List<PreCommand>) {
     val commands = mutableListOf<Command>()
 
     private fun createCommand(preCommand: PreCommand): Command {
-        if (preCommand.commandName in Shell.internalCommands) {
+        if (preCommand.commandName in ShellCommandFactory.COMMANDS) {
             return ShellCommandFactory.create(preCommand)
         }
         return ExternalCommand(preCommand.toList())

@@ -10,6 +10,8 @@ class ShellCommandFactory {
         const val exitCommandName = "exit"
         const val catCommandName = "cat"
         const val pwdCommandName = "pwd"
+        val COMMANDS =
+            listOf(changeDirectoryCommandName, echoCommandName, exitCommandName, catCommandName, pwdCommandName)
 
         fun create(preCommand: PreCommand): ShellCommand {
             when (preCommand.commandName) {
