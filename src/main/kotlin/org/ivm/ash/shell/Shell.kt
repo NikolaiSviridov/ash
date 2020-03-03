@@ -10,7 +10,7 @@ class Shell(private val arguments: ArgumentList) {
     private val promt = Promt()
 
     companion object {
-        val internalCommands = listOf("exit", "cat", "echo", "cd")
+        val internalCommands = listOf("exit", "cat", "echo", "cd", "pwd", "wc")
         val SUCCESS_EXIT_CODE = 0
     }
 

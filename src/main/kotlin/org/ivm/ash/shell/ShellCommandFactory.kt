@@ -26,7 +26,7 @@ class ShellCommandFactory {
                     return ExitCommand()
                 }
                 catCommandName -> {
-                    TODO("Not implemented")
+                    return CatCommand(preCommand.arguments)
                 }
                 pwdCommandName -> {
                     return ProcessWorkingDirectoryCommand()
