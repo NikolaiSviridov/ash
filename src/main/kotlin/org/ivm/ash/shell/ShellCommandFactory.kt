@@ -5,11 +5,11 @@ import java.lang.IllegalArgumentException
 
 class ShellCommandFactory {
     companion object {
-        val changeDirectoryCommandName = "cd"
-        val echoCommandName = "echo"
-        val exitCommandName = "exit"
-        val catCommandName = "cat"
-        val pwdCommandName = "pwd"
+        const val changeDirectoryCommandName = "cd"
+        const val echoCommandName = "echo"
+        const val exitCommandName = "exit"
+        const val catCommandName = "cat"
+        const val pwdCommandName = "pwd"
 
         fun create(preCommand: PreCommand): ShellCommand {
             when (preCommand.commandName) {
@@ -20,7 +20,7 @@ class ShellCommandFactory {
                     return ChangeDirectoryCommand(preCommand.arguments.first())
                 }
                 echoCommandName -> {
-                    TODO("Not implemented")
+                    return EchoCommand(preCommand.arguments)
                 }
                 exitCommandName -> {
                     return ExitCommand()
