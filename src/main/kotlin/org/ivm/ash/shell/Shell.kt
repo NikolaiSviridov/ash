@@ -33,18 +33,16 @@ class Shell(private val arguments: ArgumentList) {
         val commandsPipeline = buildCommandPipeline(input)
         var lastOutput: ByteArray? = null
         for (command in commandsPipeline) {
-            if (command is InternalShellCommand) {
-                command.setShellCurrentDirectory(currentDirectory)
-                command.setShellEnvironment(environment)
-            }
+            command.setWorkingDirectory(currentDirectory)
+            command.setEnvironment(environment)
             command.execute(lastOutput)
             if (command.getExitCode() != SUCCESS_EXIT_CODE) {
                 handleFailedCommand(command)
                 return
             }
             if (command is InternalShellCommand) {
-                currentDirectory = command.getShellCurrentDirectory()
-                environment = command.getShellEnvironment()
+                currentDirectory = command.getModifiedWorkingDirectory()
+                environment = command.getModifiedEnvironment()
             }
             lastOutput = command.getOutput()
         }

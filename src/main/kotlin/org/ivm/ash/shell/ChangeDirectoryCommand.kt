@@ -7,19 +7,19 @@ class ChangeDirectoryCommand(private val argument: String): InternalShellCommand
     private lateinit var currentDirectory: File
     private lateinit var environment: Environment
 
-    override fun setShellEnvironment(environment: Environment) {
+    override fun setEnvironment(environment: Environment) {
         this.environment = environment
     }
 
-    override fun setShellCurrentDirectory(currentDirectory: File) {
+    override fun setWorkingDirectory(currentDirectory: File) {
         this.currentDirectory = currentDirectory
     }
 
-    override fun getShellEnvironment(): Environment {
+    override fun getModifiedEnvironment(): Environment {
         return environment
     }
 
-    override fun getShellCurrentDirectory(): File {
+    override fun getModifiedWorkingDirectory(): File {
         return currentDirectory
     }
 

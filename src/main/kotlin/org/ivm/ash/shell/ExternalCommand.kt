@@ -3,9 +3,10 @@ package org.ivm.ash.shell
 import java.io.File
 
 class ExternalCommand(private val command: List<String>): Command {
-    private var output = ByteArray(0)
-//    private var error = ByteArray(0)
+    private var output: ByteArray? = null
     private var exitCode = 0
+    private lateinit var workingDirectory: File
+    private lateinit var environment: Environment
 
     override fun execute(input: ByteArray?) {
         runProcess(input)
@@ -19,13 +20,22 @@ class ExternalCommand(private val command: List<String>): Command {
         return exitCode
     }
 
+    override fun setWorkingDirectory(directory: File) {
+        workingDirectory = directory
+    }
+
+    override fun setEnvironment(environment: Environment) {
+        this.environment = environment
+    }
+
     override fun toString(): String {
         return command.first() + " " + command.drop(1).joinToString("")
     }
 
     private fun runProcess(input: ByteArray? = null) {
         val builder = ProcessBuilder(command);
-        builder.directory(File(System.getProperty("user.dir")))
+        builder.directory(workingDirectory)
+        builder.environment().putAll(environment.variables)
         if (input != null) {
             builder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
         }

@@ -9,6 +9,7 @@ class ShellCommandFactory {
         val echoCommandName = "echo"
         val exitCommandName = "exit"
         val catCommandName = "cat"
+        val pwdCommandName = "pwd"
 
         fun create(preCommand: PreCommand): ShellCommand {
             when (preCommand.commandName) {
@@ -22,10 +23,13 @@ class ShellCommandFactory {
                     TODO("Not implemented")
                 }
                 exitCommandName -> {
-                    TODO("Not implemented")
+                    return ExitCommand()
                 }
                 catCommandName -> {
                     TODO("Not implemented")
+                }
+                pwdCommandName -> {
+                    return ProcessWorkingDirectoryCommand()
                 }
                 else -> {
                     throw IllegalStateException()
