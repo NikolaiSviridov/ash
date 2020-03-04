@@ -30,6 +30,10 @@ class CatCommand(private val arguments: List<String>): ShellCommand {
         output = result.toByteArray()
     }
 
+    override fun toString(): String {
+        return "cat " + arguments.joinToString(" ")
+    }
+
     override fun getOutput(): ByteArray? {
         return output
     }
