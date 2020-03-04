@@ -9,6 +9,11 @@ class ExternalCommand(private val command: List<String>): Command {
     private lateinit var environment: Environment
 
     override fun execute(input: ByteArray?) {
+        val name = command.first()
+        if (!workingDirectory.resolve(name).exists()) {
+            exitCode = 1
+            return
+        }
         runProcess(input)
     }
 
@@ -46,7 +51,7 @@ class ExternalCommand(private val command: List<String>): Command {
         val process = builder.start()
         if (input != null) {
             process.outputStream.write(input)
-            // Simply it's equivalent to sending Ctrl-D
+            // It's equivalent to sending Ctrl-D
             process.outputStream.close()
         }
         exitCode = process.waitFor()
