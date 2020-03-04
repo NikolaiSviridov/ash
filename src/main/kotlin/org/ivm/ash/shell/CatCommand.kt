@@ -12,7 +12,8 @@ class CatCommand(private val arguments: List<String>): ShellCommand {
 
     override fun execute(input: ByteArray?) {
         if (input != null) {
-            TODO("Piping input into cat command is not implemented yet")
+            output = input
+            return
         }
         val result = ByteArrayOutputStream()
         for (filePath in arguments) {
