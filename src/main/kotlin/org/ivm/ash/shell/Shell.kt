@@ -16,6 +16,9 @@ class Shell(private val arguments: ArgumentList) {
     fun promtLoop() {
         while (true) {
             val input = promt.promtInput(currentDirectory)
+            if (input.isEmpty()) {
+                continue
+            }
             execute(input)
         }
     }
