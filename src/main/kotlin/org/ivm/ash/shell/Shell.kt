@@ -62,7 +62,7 @@ class Shell(private val arguments: ArgumentList) {
 
     private fun updateEnvironment(mappings: VariablesMappings) {
         for (mapping in mappings.asSequence()) {
-            environment.setVariable(mapping.key, mapping.value.joinToString(""))
+            environment.setVariable(mapping.key, mapping.value.joinToString { it.value })
         }
     }
 
