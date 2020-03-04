@@ -10,8 +10,17 @@ class ShellCommandFactory {
         const val exitCommandName = "exit"
         const val catCommandName = "cat"
         const val pwdCommandName = "pwd"
+        const val wcCommandName = "wc"
+
         val COMMANDS =
-            listOf(changeDirectoryCommandName, echoCommandName, exitCommandName, catCommandName, pwdCommandName)
+            listOf(
+                changeDirectoryCommandName,
+                echoCommandName,
+                exitCommandName,
+                catCommandName,
+                pwdCommandName,
+                wcCommandName
+            )
 
         fun create(preCommand: PreCommand): ShellCommand {
             when (preCommand.commandName) {
@@ -20,6 +29,9 @@ class ShellCommandFactory {
                         throw IllegalArgumentException("cd command takes exactly one argument!")
                     }
                     return ChangeDirectoryCommand(preCommand.arguments.first())
+                }
+                wcCommandName -> {
+                    return WordCountCommand(preCommand.arguments)
                 }
                 echoCommandName -> {
                     return EchoCommand(preCommand.arguments)
