@@ -11,6 +11,14 @@ class WordCountCommand(private val arguments: List<String>): ShellCommand {
 
     override fun execute(input: ByteArray?) {
         val result = ByteArrayOutputStream()
+        if (input != null) {
+            val bytes = input.size.toLong()
+            val words = getWords(ByteArrayInputStream(input))
+            val lines = getLines(input)
+            putResult(lines, words, bytes, "", result)
+            output = result.toByteArray()
+            return
+        }
         for (file in arguments) {
             val target = workingDirectory.resolve(file)
             if (!target.exists()) {
@@ -18,14 +26,10 @@ class WordCountCommand(private val arguments: List<String>): ShellCommand {
                 break
             }
             try {
-                result.write(getLines(target).toString().toByteArray())
-                result.write("    ".toByteArray())
-                result.write(getWords(target).toString().toByteArray())
-                result.write("    ".toByteArray())
-                result.write(getBytes(target).toString().toByteArray())
-                result.write("    ".toByteArray())
-                result.write(file.toByteArray())
-                result.write("\n".toByteArray())
+                val lines = getLines(target)
+                val words = getWords(FileInputStream(target))
+                val bytes = getBytes(target)
+                putResult(lines, words, bytes, file, result)
             }
             catch (exception: IOException) {
                 exitCode = 1
@@ -35,12 +39,33 @@ class WordCountCommand(private val arguments: List<String>): ShellCommand {
         output = result.toByteArray()
     }
 
+    private fun getLines(input: ByteArray): Long {
+        val reader = Scanner(ByteArrayInputStream(input))
+        var count: Long = 0
+        while (reader.hasNextLine()) {
+            reader.nextLine()
+            count += 1
+        }
+        return count
+    }
+
+    private fun putResult(lines: Long, words: Long, bytes: Long, file: String, result: ByteArrayOutputStream) {
+        result.write(lines.toString().toByteArray())
+        result.write("    ".toByteArray())
+        result.write(words.toString().toByteArray())
+        result.write("    ".toByteArray())
+        result.write(bytes.toString().toByteArray())
+        result.write("    ".toByteArray())
+        result.write(file.toByteArray())
+        result.write("\n".toByteArray())
+    }
+
     private fun getBytes(file: File): Long {
         return file.length()
     }
 
-    private fun getWords(file: File): Long {
-        val scanner = Scanner(FileInputStream(file))
+    private fun getWords(stream: InputStream): Long {
+        val scanner = Scanner(stream)
         var count: Long = 0
         while (scanner.hasNext()) {
             scanner.next()
