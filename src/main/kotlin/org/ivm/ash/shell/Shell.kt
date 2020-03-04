@@ -2,6 +2,7 @@ package org.ivm.ash.shell
 
 import org.ivm.ash.parser.*
 import java.io.File
+import java.lang.Exception
 
 
 class Shell(private val arguments: ArgumentList) {
@@ -19,7 +20,12 @@ class Shell(private val arguments: ArgumentList) {
             if (input.isEmpty()) {
                 continue
             }
-            execute(input)
+            try {
+                execute(input)
+            }
+            catch (exception: Exception) {
+                println("Could not parse command")
+            }
         }
     }
 
