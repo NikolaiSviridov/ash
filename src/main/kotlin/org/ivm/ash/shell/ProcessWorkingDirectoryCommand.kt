@@ -8,11 +8,11 @@ class ProcessWorkingDirectoryCommand: ShellCommand {
     override fun execute(input: ByteArray?) {}
 
     override fun getOutput(): ByteArray? {
-        return currentDirectory.absolutePath.toByteArray()
+        return (currentDirectory.absolutePath + "\n").toByteArray()
     }
 
     override fun getExitCode(): Int {
-        return 1
+        return 0
     }
 
     override fun setWorkingDirectory(directory: File) {
