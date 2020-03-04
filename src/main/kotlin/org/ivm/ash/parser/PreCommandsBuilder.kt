@@ -1,8 +1,18 @@
 package org.ivm.ash.parser
 
+/**
+ * Билдер, для формирования PreCommand. Фильтрует блоки токенов и конструирует из них PreCommand.
+ * @param blocks Список блоков токенов
+ */
 class PreCommandsBuilder(val blocks: List<TokenList>) {
+    /**
+     * Список сформированных PreCommand
+     */
     val commands = mutableListOf<PreCommand>()
 
+    /**
+     * Строит список PreCommand
+     */
     fun build() {
         for (block in blocks) {
             val block = block.dropWhile { it.type == TokenType.space }

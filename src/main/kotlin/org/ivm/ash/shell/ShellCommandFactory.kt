@@ -3,6 +3,10 @@ package org.ivm.ash.shell
 import org.ivm.ash.parser.PreCommand
 import java.lang.IllegalArgumentException
 
+
+/**
+ * Фабрика для создания внутренних команд.
+ */
 class ShellCommandFactory {
     companion object {
         const val changeDirectoryCommandName = "cd"
@@ -22,6 +26,11 @@ class ShellCommandFactory {
                 wcCommandName
             )
 
+        /**
+         * Создаёт полноценную внутреннюю команду на основе PreCommand.
+         * @param preCommand PreCommand
+         * @return Созданная команда
+         */
         fun create(preCommand: PreCommand): ShellCommand {
             when (preCommand.commandName) {
                 changeDirectoryCommandName -> {

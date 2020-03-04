@@ -1,5 +1,8 @@
 package org.ivm.ash.parser
 
+/**
+ * Строковые разделители, используемые парсером
+ */
 class Delimiter {
     class Value {
         companion object {

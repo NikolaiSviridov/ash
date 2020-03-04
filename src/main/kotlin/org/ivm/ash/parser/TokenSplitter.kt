@@ -1,13 +1,20 @@
 package org.ivm.ash.parser
 
+/**
+ * Разделяет входную строку на токены.
+ * @param input Входная строка
+ */
 class TokenSplitter(private val input: String) {
-    val tokens = arrayListOf<Token>()
+    private val tokens = arrayListOf<Token>()
 
     companion object {
         // TODO: Contruct from Delimiters
         private val regex = Regex("(?<=[ $='\"|])|(?=[ $='\"|])")
     }
 
+    /**
+     * Строит список токенов
+     */
     fun build(): ArrayList<Token> {
         val split = input.split(regex)
         var position = 0

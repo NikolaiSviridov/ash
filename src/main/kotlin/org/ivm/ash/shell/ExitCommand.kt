@@ -3,6 +3,10 @@ package org.ivm.ash.shell
 import java.io.File
 import kotlin.system.exitProcess
 
+
+/**
+ * Реализация команды exit
+ */
 class ExitCommand: ShellCommand {
     override fun execute(input: ByteArray?) {
         exitProcess(0)

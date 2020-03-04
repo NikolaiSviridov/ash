@@ -2,6 +2,11 @@ package org.ivm.ash.shell
 
 import java.io.File
 
+
+/**
+ * Реализация команды cd.
+ * @param argument Путь к директории, в которую нужно перейти
+ */
 class ChangeDirectoryCommand(private val argument: String): InternalShellCommand {
     private var exitCode = 0
     private lateinit var currentDirectory: File

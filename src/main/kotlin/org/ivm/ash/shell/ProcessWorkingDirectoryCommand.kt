@@ -2,6 +2,9 @@ package org.ivm.ash.shell
 
 import java.io.File
 
+/**
+ * Реализация комадны pwd
+ */
 class ProcessWorkingDirectoryCommand: ShellCommand {
     private lateinit var currentDirectory: File
 

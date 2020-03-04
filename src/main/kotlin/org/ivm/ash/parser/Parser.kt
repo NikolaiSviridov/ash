@@ -1,5 +1,13 @@
 package org.ivm.ash.parser
 
+/**
+ * Разделяет входную строку на список токенов и делает подстановки переменных.
+ * Результатом работы парсера является список токенов, в которых раскрыты кавычки и
+ * подставлены значения переменных. Токены разделены на блоки в соответствие с пайпами.
+ *
+ * @param input Входная строка
+ * @param mappings Значения переменных, которые нужно подставлять
+ */
 class Parser(private val input: String, val mappings: VariablesMappings = VariablesMappings()) {
     private val tokens = TokenSplitter(input).build()
     private var position = 0
@@ -107,6 +115,10 @@ class Parser(private val input: String, val mappings: VariablesMappings = Variab
         }
     }
 
+    /**
+     * Запускает парсер на входной строке.
+     * @return Список блоков токенов, разделённых пайпами
+     */
     fun parse(): List<TokenList> {
         substitute()
         return splitByPipes()

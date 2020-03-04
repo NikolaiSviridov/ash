@@ -4,7 +4,10 @@ import org.ivm.ash.parser.*
 import java.io.File
 import java.lang.Exception
 
-
+/**
+ * Класс, реализующий функционал шелла.
+ * @param arguments Аргументы командной строки, переданные при запуске шелла.
+ */
 class Shell(private val arguments: ArgumentList) {
     private var environment = Environment(System.getenv())
     private var currentDirectory = File(System.getProperty("user.dir"))
@@ -14,7 +17,7 @@ class Shell(private val arguments: ArgumentList) {
         val SUCCESS_EXIT_CODE = 0
     }
 
-    fun promtLoop() {
+    private fun promtLoop() {
         while (true) {
             val input = promt.promtInput(currentDirectory)
             if (input.isEmpty()) {
@@ -29,6 +32,9 @@ class Shell(private val arguments: ArgumentList) {
         }
     }
 
+    /**
+     * Запускает цикл ввода пользовательских команд.
+     */
     fun start() {
         promtLoop()
     }

@@ -4,6 +4,10 @@ import java.io.*
 import java.nio.file.Files
 import java.util.*
 
+
+/**
+ * Реализация команды wc
+ */
 class WordCountCommand(private val arguments: List<String>): ShellCommand {
     private var output: ByteArray? = null
     private var exitCode = 0

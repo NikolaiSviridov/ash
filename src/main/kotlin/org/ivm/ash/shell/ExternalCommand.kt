@@ -2,6 +2,10 @@ package org.ivm.ash.shell
 
 import java.io.File
 
+/**
+ * Выполнение команды, неизвестной шеллу.
+ * @param command Команда в виде списка из её имени и аргументов
+ */
 class ExternalCommand(private val command: List<String>): Command {
     private var output: ByteArray? = null
     private var exitCode = 0

@@ -2,6 +2,10 @@ package org.ivm.ash.shell
 
 import java.io.File
 
+/**
+ * Реализация команды ehco.
+ * @param arguments Список аргументов - имена файлов, содержимое которых нужно вывести
+ */
 class EchoCommand(private val arguments: List<String>): ShellCommand {
     private lateinit var output: ByteArray
     private var exitCode = 0

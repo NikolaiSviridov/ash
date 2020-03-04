@@ -5,6 +5,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 
+
+/**
+ * Реализация команды cat.
+ * @param arguments Список аргументов - имена файлов, содержимое которых нужно вывести (может быть пустым)
+ */
 class CatCommand(private val arguments: List<String>): ShellCommand {
     private var output: ByteArray? = null
     private var exitCode = 0
