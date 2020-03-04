@@ -5,6 +5,7 @@ class PreCommandsBuilder(val blocks: List<TokenList>) {
 
     fun build() {
         for (block in blocks) {
+            val block = block.dropWhile { it.type == TokenType.space }
             val name = block.first().value
             if (name.isEmpty()) {
                 continue
