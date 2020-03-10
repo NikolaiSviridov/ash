@@ -4,6 +4,11 @@ import java.io.*
 import java.lang.Exception
 import java.util.*
 
+/**
+ * Реализация команды grep
+ *
+ * @param argumentList Список аргументов, обрабатываемых командой
+ */
 class GrepCommand(private val argumentList: ArgumentList): ShellCommand {
     private var arguments = GrepCommandArgumentsParser(argumentList)
     private var exitCode: Int = 0

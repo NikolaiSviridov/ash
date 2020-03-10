@@ -7,11 +7,12 @@ import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.*
 import java.lang.Exception
 
-// -i (нечувствительность к регистру),
-// -w (поиск только слов целиком),
-// -A n (распечатать n строк после строки с совпадением);
-// поддерживающую регулярные выражения в строке поиска;
 
+/**
+ * Парсер аргументов для команды grep
+ *
+ * @param argumentList Список аргументов, которые нужно парсить
+ */
 class GrepCommandArgumentsParser(private val argumentList: ArgumentList): CliktCommand(name="grep") {
     val ignoreCase by option("--ignore-case", "-i").flag(default=false)
     val searchWords by option("--words", "-w").flag(default=false)
@@ -19,6 +20,9 @@ class GrepCommandArgumentsParser(private val argumentList: ArgumentList): CliktC
     val pattern by argument()
     val inputFile by argument().optional()
 
+    /**
+     * Запускает парсер на входном списке аргументов.
+     */
     fun parse() {
         parse(argumentList)
     }
