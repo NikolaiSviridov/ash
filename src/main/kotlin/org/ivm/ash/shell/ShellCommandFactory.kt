@@ -15,6 +15,7 @@ class ShellCommandFactory {
         const val catCommandName = "cat"
         const val pwdCommandName = "pwd"
         const val wcCommandName = "wc"
+        const val grepCommandName = "grep"
 
         val COMMANDS =
             listOf(
@@ -23,7 +24,8 @@ class ShellCommandFactory {
                 exitCommandName,
                 catCommandName,
                 pwdCommandName,
-                wcCommandName
+                wcCommandName,
+                grepCommandName
             )
 
         /**
@@ -53,6 +55,9 @@ class ShellCommandFactory {
                 }
                 pwdCommandName -> {
                     return ProcessWorkingDirectoryCommand()
+                }
+                grepCommandName -> {
+                    return GrepCommand(preCommand.arguments)
                 }
                 else -> {
                     throw IllegalStateException()
