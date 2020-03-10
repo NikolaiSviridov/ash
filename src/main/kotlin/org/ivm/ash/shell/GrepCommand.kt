@@ -18,7 +18,7 @@ class GrepCommand(private val argumentList: ArgumentList): ShellCommand {
             true -> Regex(pattern, RegexOption.IGNORE_CASE)
             else -> Regex(pattern)
         }
-        val reader = when (input != null) {
+        val stream = when (input != null) {
             true -> Scanner(ByteArrayInputStream(input))
             else -> {
                 val file = File(arguments.inputFile)
@@ -31,7 +31,6 @@ class GrepCommand(private val argumentList: ArgumentList): ShellCommand {
             }
         }
         var matchesCount = 0
-        val stream = Scanner(FileReader(File(arguments.inputFile)))
         var linesNeeded = 0
         while (stream.hasNextLine()) {
             val line = stream.nextLine()

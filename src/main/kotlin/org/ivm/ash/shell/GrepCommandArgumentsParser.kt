@@ -2,6 +2,7 @@ package org.ivm.ash.shell
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.*
 
@@ -15,7 +16,7 @@ class GrepCommandArgumentsParser(private val argumentList: ArgumentList): CliktC
     val searchWords by option("--words", "-w").flag(default=false)
     val printLinesAfter by option("-A").int().default(0)
     val pattern by argument()
-    val inputFile by argument()
+    val inputFile by argument().optional()
 
     init {
         parse(argumentList)
