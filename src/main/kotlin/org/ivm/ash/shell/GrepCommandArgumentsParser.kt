@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.*
+import java.lang.Exception
 
 // -i (нечувствительность к регистру),
 // -w (поиск только слов целиком),
@@ -18,7 +19,7 @@ class GrepCommandArgumentsParser(private val argumentList: ArgumentList): CliktC
     val pattern by argument()
     val inputFile by argument().optional()
 
-    init {
+    fun parse() {
         parse(argumentList)
     }
 

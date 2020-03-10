@@ -40,6 +40,10 @@ class Shell(private val arguments: ArgumentList) {
     }
 
     private fun handleFailedCommand(command: Command) {
+        if (command.getOutput() != null) {
+            System.out.write(command.getOutput())
+            System.out.flush()
+        }
         println("Command: $command terminated with non-zero exit code: ${command.getExitCode()}")
     }
 
