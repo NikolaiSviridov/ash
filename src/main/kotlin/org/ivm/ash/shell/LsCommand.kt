@@ -14,10 +14,11 @@ class LsCommand(private val arguments: List<String>) : ShellCommand {
 
 
         if (arguments.isEmpty() || input != null) {
-            workingDirectory.walk(FileWalkDirection.BOTTOM_UP).maxDepth(1).forEach {
-                val out = it.name + "\n"
-                result.write(out.toByteArray())
-            }
+            workingDirectory.walk(FileWalkDirection.BOTTOM_UP).maxDepth(1)
+                .filter { p -> p.name != workingDirectory.name }.forEach {
+                    val out = it.name + "\n"
+                    result.write(out.toByteArray())
+                }
             output = result.toByteArray()
             return
         }
@@ -34,12 +35,13 @@ class LsCommand(private val arguments: List<String>) : ShellCommand {
                     val msg = file.absolutePath + ":\n"
                     result.write(msg.toByteArray())
                 }
-                file.walk().forEach {
+                file.walk().filter { p -> p.name != file.name }.forEach {
                     val out = it.name + "\n"
                     result.write(out.toByteArray())
                 }
-            } else if (file.isFile){
-                result.write(file.name.toByteArray())
+            } else if (file.isFile) {
+                val msg = file.name + "\n"
+                result.write(msg.toByteArray())
             } else {
                 val msg = "ls: cannot access '" + file.name + "': No such file or directory\n"
                 result.write(msg.toByteArray())
