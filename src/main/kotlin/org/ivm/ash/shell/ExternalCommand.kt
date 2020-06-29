@@ -59,6 +59,6 @@ class ExternalCommand(private val command: List<String>): Command {
             process.outputStream.close()
         }
         exitCode = process.waitFor()
-        output = process.inputStream.readAllBytes()
+        output = process.inputStream.readBytes()
     }
 }

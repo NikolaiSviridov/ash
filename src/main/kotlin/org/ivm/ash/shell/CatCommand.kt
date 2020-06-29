@@ -25,7 +25,7 @@ class CatCommand(private val arguments: List<String>): ShellCommand {
             val file = workingDirectory.resolve(File(filePath))
             try {
                 val reader = FileInputStream(file)
-                result.write(reader.readAllBytes())
+                result.write(reader.readBytes())
                 result.write("\n".toByteArray())
             }
             catch (exception: IOException) {
