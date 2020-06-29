@@ -23,49 +23,13 @@ internal class LsCommandTest {
         command1.setEnvironment(environment)
         command1.execute()
 
-        val expectedList1 = listOf(
-            currentDirectory.resolve(pathStart + "testDir").absolutePath + ":\n",
-            "1\n",
-            "2\n",
-            "testDir2\n",
-            "ls: cannot access 'testDir2': No such file or directory\n"
-        )
-
-        val expected1 = ByteArrayOutputStream()
-        expectedList1.forEach{
-            expected1.write(it.toByteArray())
-        }
+        val expected1:String = currentDirectory.path + "/" + pathStart + "testDir:\n" +
+                "1\n" +
+                "2\n" +
+                "ls: cannot access 'testDir2': No such file or directory\n"
 
         val output1 = command1.getOutput()
-
-        assertArrayEquals(expected1.toByteArray(), output1)
-
-
-
-        val args2 = listOf(pathStart + "testDir", pathStart + "testDir/2", pathStart + "testDir/testDir2")
-        val command2 = LsCommand(args2)
-
-        command2.setWorkingDirectory(currentDirectory)
-        command2.setEnvironment(environment)
-        command2.execute()
-
-        val expectedList2 = listOf(
-            currentDirectory.resolve(pathStart + "testDir").absolutePath + ":\n",
-            "1\n",
-            "2\n",
-            "testDir2\n",
-            "2\n",
-            currentDirectory.resolve(pathStart + "testDir/testDir2").absolutePath + ":\n"
-        )
-
-        val expected2 = ByteArrayOutputStream()
-        expectedList2.forEach{
-            expected2.write(it.toByteArray())
-        }
-
-        val output2 = command2.getOutput()
-
-        assertArrayEquals(expected2.toByteArray(), output2)
-
+        val strOutput1 = output1?.let { String(it) }
+        assertEquals(expected1, strOutput1)
     }
 }
